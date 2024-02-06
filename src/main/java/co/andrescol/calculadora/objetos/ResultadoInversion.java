@@ -2,16 +2,22 @@ package co.andrescol.calculadora.objetos;
 
 import co.andrescol.calculadora.util.Util;
 
-public record ResultadoInversion (double capitalFinal, double retencion, double gananciaReal){
+public record ResultadoInversion(double capitalFinal, double retencion, double gananciaReal, double impuesto4x1000) {
     private static double redondear(double valor) {
         return Math.round(valor * 100) / 100.0;
     }
+
     @Override
     public String toString() {
         return """
-               Capital final: %s
-               Ganancia Total: %s
-               Retencion: %s
-               """.formatted(Util.toDinero(capitalFinal), Util.toDinero(gananciaReal), Util.toDinero(retencion));
+                Capital final: %s
+                Retencion: %s
+                4 x 1000: %s
+                Ganancia Total: %s
+                """.formatted(
+                    Util.toDinero(capitalFinal),
+                    Util.toDinero(retencion),
+                    Util.toDinero(impuesto4x1000),
+                    Util.toDinero(gananciaReal));
     }
 }

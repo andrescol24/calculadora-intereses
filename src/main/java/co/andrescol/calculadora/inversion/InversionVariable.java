@@ -16,6 +16,7 @@ public class InversionVariable extends Inversion {
         double totalGanancia = 0;
         double totalRetencion = 0;
         double capitalFinal = inversion.getInversionInicial();
+        double impuesto4x1000 = 0;
         InversionCDT inversionActual = inversion;
         for(int i = 0; i < variacion.ciclos(); i++) {
             ResultadoInversion resultado = inversionActual.calcularGanancia();
@@ -23,8 +24,9 @@ public class InversionVariable extends Inversion {
             capitalFinal += variacion.variacionInversion();
             totalRetencion += resultado.retencion();
             inversionActual = variacion.aplicarVariacion(inversionActual, resultado.gananciaReal());
+            impuesto4x1000 += resultado.impuesto4x1000();
         }
-        return new ResultadoInversion(capitalFinal, totalRetencion, totalGanancia);
+        return new ResultadoInversion(capitalFinal, totalRetencion, totalGanancia, impuesto4x1000);
     }
 
     @Override

@@ -19,13 +19,15 @@ public class InversionCombinada extends Inversion {
         double capitalFinal = 0;
         double retencion = 0;
         double ganancia = 0;
+        double impuesto4x1000 = 0;
         for (Inversion inversion : inversiones) {
             ResultadoInversion resultado = inversion.calcularGanancia();
             capitalFinal += resultado.capitalFinal();
             retencion += resultado.retencion();
             ganancia += resultado.gananciaReal();
+            impuesto4x1000 += resultado.impuesto4x1000();
         }
-        return new ResultadoInversion(capitalFinal, retencion, ganancia);
+        return new ResultadoInversion(capitalFinal, retencion, ganancia, impuesto4x1000);
     }
 
     public Map<Inversion, ResultadoInversion> calcularResultadoPorInversion() {
@@ -42,7 +44,7 @@ public class InversionCombinada extends Inversion {
         String inversionesString = resultadoPorInversion
                 .entrySet()
                 .stream()
-                .map(entry -> entry.getKey().toString() + ">>>>> genero >>>>>\n" + entry.getValue().toString()).collect(Collectors.joining("\n"));
+                .map(entry -> entry.getKey().toString() + "Resulta en ->\n" + entry.getValue().toString()).collect(Collectors.joining("\n"));
         return "Inversion Combinada " + getNombre() + "\n" + inversionesString;
     }
 }

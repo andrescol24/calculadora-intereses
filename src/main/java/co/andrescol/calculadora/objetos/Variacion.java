@@ -7,7 +7,7 @@ public record Variacion(double variacionInversion, double variacionEA, double to
     public InversionCDT aplicarVariacion(InversionCDT inversion, double ganancia) {
         double nuevaInversion = inversion.getInversionInicial() + ganancia + variacionInversion;
         double nuevoEA = aplicarVariacionEA(inversion.getEar());
-        return new InversionCDT(inversion.getNombre(), nuevaInversion, nuevoEA, inversion.getTiempoEnDias(), inversion.getPorcentajeRetencion());
+        return new InversionCDT(nuevaInversion, nuevoEA, inversion);
     }
 
     private double aplicarVariacionEA(double ear) {

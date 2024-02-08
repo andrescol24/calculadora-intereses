@@ -1,6 +1,7 @@
 package co.andrescol.calculadora.inversion;
 
-import co.andrescol.calculadora.objetos.ResultadoInversion;
+import co.andrescol.calculadora.resultadoinversion.CalculoInversion;
+import co.andrescol.calculadora.resultadoinversion.ResultadoInversion;
 import co.andrescol.calculadora.objetos.Variacion;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,18 +16,20 @@ public class InversionVariable extends Inversion {
     public ResultadoInversion calcularGanancia() {
         double totalGanancia = 0;
         double totalRetencion = 0;
+        double total4x1000 = 0;
+        double totalAportesSeguridad = 0;
         double capitalFinal = inversion.getInversionInicial();
-        double impuesto4x1000 = 0;
         InversionCDT inversionActual = inversion;
         for(int i = 0; i < variacion.ciclos(); i++) {
             ResultadoInversion resultado = inversionActual.calcularGanancia();
-            totalGanancia += resultado.gananciaReal();
+            totalGanancia += resultado.getGananciaReal();
             capitalFinal += variacion.variacionInversion();
-            totalRetencion += resultado.retencion();
-            inversionActual = variacion.aplicarVariacion(inversionActual, resultado.gananciaReal());
-            impuesto4x1000 += resultado.impuesto4x1000();
+            totalRetencion += resultado.getRetencion();
+            total4x1000 += resultado.getImpuesto4x1000();
+            totalAportesSeguridad += resultado.getAportesSeguridadSocial();
+            inversionActual = variacion.aplicarVariacion(inversionActual, resultado.getGananciaReal());
         }
-        return new ResultadoInversion(capitalFinal, totalRetencion, totalGanancia, impuesto4x1000);
+        return new ResultadoInversion(capitalFinal, totalGanancia, totalRetencion, total4x1000, totalAportesSeguridad);
     }
 
     @Override

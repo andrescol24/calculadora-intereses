@@ -1,4 +1,4 @@
-package co.andrescol.calculadora.objetos;
+package co.andrescol.calculadora.inversion;
 
 public enum TipoInversion {
     NORMAL,

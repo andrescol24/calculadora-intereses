@@ -1,6 +1,6 @@
 package co.andrescol.calculadora.inversion;
 
-import co.andrescol.calculadora.objetos.ResultadoInversion;
+import co.andrescol.calculadora.resultadoinversion.ResultadoInversion;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,18 +16,25 @@ public class InversionCombinada extends Inversion {
 
     @Override
     public ResultadoInversion calcularGanancia() {
-        double capitalFinal = 0;
+        double capital = 0;
         double retencion = 0;
         double ganancia = 0;
         double impuesto4x1000 = 0;
+        double aportesSeguridad = 0;
         for (Inversion inversion : inversiones) {
             ResultadoInversion resultado = inversion.calcularGanancia();
-            capitalFinal += resultado.capitalFinal();
-            retencion += resultado.retencion();
-            ganancia += resultado.gananciaReal();
-            impuesto4x1000 += resultado.impuesto4x1000();
+            capital += resultado.getCapitalInicial();
+            retencion += resultado.getRetencion();
+            ganancia += resultado.getGananciaReal();
+            impuesto4x1000 += resultado.getImpuesto4x1000();
+            aportesSeguridad += resultado.getAportesSeguridadSocial();
         }
-        return new ResultadoInversion(capitalFinal, retencion, ganancia, impuesto4x1000);
+        if(aportesSeguridad != 0) {
+            return new ResultadoInversion(capital, ganancia, retencion, impuesto4x1000, aportesSeguridad);
+        } else {
+            return new ResultadoInversion(capital, ganancia, retencion, impuesto4x1000, 0)
+                    .aplicarSeguridadSocial();
+        }
     }
 
     public Map<Inversion, ResultadoInversion> calcularResultadoPorInversion() {

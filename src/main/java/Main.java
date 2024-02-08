@@ -1,6 +1,6 @@
 import co.andrescol.calculadora.inversion.Inversion;
 import co.andrescol.calculadora.objetos.InversionDeserializer;
-import co.andrescol.calculadora.objetos.ResultadoInversion;
+import co.andrescol.calculadora.resultadoinversion.ResultadoInversion;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
@@ -24,12 +24,16 @@ public class Main {
         for(Inversion inversion : inversiones) {
             ResultadoInversion resultado = inversion.calcularGanancia();
             inversion.calcularEImprimir(resultado);
-            if(mejorResultado == null || mejorResultado.gananciaReal() < resultado.gananciaReal()) {
+            if(mejorResultado == null || mejorResultado.getGananciaReal() < resultado.getGananciaReal()) {
                 mejorResultado = resultado;
                 mejorInversion = inversion;
             }
         }
         Logger log = LogManager.getLogger();
-        log.info("=================== MEJOR INVERSION =====================\n{}", mejorInversion);
+        log.info("""
+            =================== MEJOR INVERSION =====================
+            {}
+            {}
+            """, mejorInversion, mejorResultado);
     }
 }

@@ -4,6 +4,7 @@ import co.andrescol.calculadora.inversion.Inversion;
 import co.andrescol.calculadora.inversion.InversionCDT;
 import co.andrescol.calculadora.inversion.InversionCombinada;
 import co.andrescol.calculadora.inversion.InversionVariable;
+import co.andrescol.calculadora.inversion.TipoInversion;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;

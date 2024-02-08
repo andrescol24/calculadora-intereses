@@ -1,6 +1,7 @@
 package co.andrescol.calculadora.inversion;
 
-import co.andrescol.calculadora.objetos.ResultadoInversion;
+import co.andrescol.calculadora.resultadoinversion.CalculoInversion;
+import co.andrescol.calculadora.resultadoinversion.ResultadoInversion;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
@@ -15,10 +16,6 @@ public abstract class Inversion {
     private String tipo;
 
     public abstract ResultadoInversion calcularGanancia();
-    public void calcularEImprimir() {
-        ResultadoInversion resultado = calcularGanancia();
-        calcularEImprimir(resultado);
-    }
 
     public void calcularEImprimir(ResultadoInversion resultado) {
         Logger log = LogManager.getLogger();

@@ -1,8 +1,7 @@
 package co.andrescol.calculadora.inversion;
 
-import co.andrescol.calculadora.resultadoinversion.CalculoInversion;
-import co.andrescol.calculadora.resultadoinversion.ResultadoInversion;
 import co.andrescol.calculadora.objetos.Variacion;
+import co.andrescol.calculadora.resultadoinversion.ResultadoInversion;
 import lombok.Getter;
 import lombok.Setter;
 

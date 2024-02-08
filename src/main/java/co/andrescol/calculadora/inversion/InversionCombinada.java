@@ -21,6 +21,7 @@ public class InversionCombinada extends Inversion {
         double ganancia = 0;
         double impuesto4x1000 = 0;
         double aportesSeguridad = 0;
+        boolean variable = inversiones.stream().anyMatch(x -> x instanceof InversionVariable);
         for (Inversion inversion : inversiones) {
             ResultadoInversion resultado = inversion.calcularGanancia();
             capital += resultado.getCapitalInicial();
@@ -29,7 +30,7 @@ public class InversionCombinada extends Inversion {
             impuesto4x1000 += resultado.getImpuesto4x1000();
             aportesSeguridad += resultado.getAportesSeguridadSocial();
         }
-        if(aportesSeguridad != 0) {
+        if(aportesSeguridad != 0 || variable) {
             return new ResultadoInversion(capital, ganancia, retencion, impuesto4x1000, aportesSeguridad);
         } else {
             return new ResultadoInversion(capital, ganancia, retencion, impuesto4x1000, 0)

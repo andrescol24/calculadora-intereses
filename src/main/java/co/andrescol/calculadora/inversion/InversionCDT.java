@@ -1,7 +1,6 @@
 package co.andrescol.calculadora.inversion;
 
 import co.andrescol.calculadora.beneficio.TipoBeneficio;
-import co.andrescol.calculadora.resultadoinversion.CalculoInversion;
 import co.andrescol.calculadora.resultadoinversion.ResultadoInversion;
 import co.andrescol.calculadora.util.Util;
 import lombok.Getter;

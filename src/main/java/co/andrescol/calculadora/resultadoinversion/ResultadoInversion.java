@@ -64,13 +64,7 @@ public class ResultadoInversion {
 
     @Override
     public String toString() {
-        return """
-                Capital: %s
-                Retencion: %s
-                4x1000: %s
-                Seguridad social: %s
-                Ganancia Total: %s
-                """.formatted(
+        return "Capital: %s, Retencion: %s, 4x1000: %s, Seguridad social: %s, Ganancia Total: %s".formatted(
                 Util.toDinero(capitalInicial),
                 Util.toDinero(retencion),
                 impuesto4x1000,

@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Getter
@@ -17,6 +18,7 @@ public class InversionVariable extends Inversion {
     private InversionCDT inversion;
     private Variacion variacion;
     private List<ResultadoInversion> historial;
+    private boolean aplica4x100Final;
 
     @Override
     public ResultadoInversion calcularGanancia() {
@@ -25,19 +27,27 @@ public class InversionVariable extends Inversion {
         this.historial = new LinkedList<>();
         Impuesto4x1000 total4x1000 = new Impuesto4x1000();
         AporteSeguridadSocial totalAportesSeguridad = new AporteSeguridadSocial();
-        double capitalFinal = inversion.getInversionInicial();
         InversionCDT inversionActual = inversion;
-        for(int i = 0; i < variacion.ciclos(); i++) {
-            ResultadoInversion resultado = inversionActual.calcularGanancia();
-            totalGanancia += resultado.getGananciaReal();
-            capitalFinal += variacion.variacionInversion();
-            totalRetencion += resultado.getRetencion();
-            total4x1000.sumar(resultado.getImpuesto4x1000());
-            totalAportesSeguridad.sumar(resultado.getAporteSeguridadSocial());
-            historial.add(resultado);
-            inversionActual = variacion.aplicarVariacion(inversionActual, resultado.getGananciaReal());
+        ResultadoInversion ultimoResultado = null;
+        for (int i = 0; i < variacion.ciclos(); i++) {
+            ultimoResultado = inversionActual.calcularGanancia();
+            totalGanancia += ultimoResultado.getGananciaReal();
+            totalRetencion += ultimoResultado.getRetencion();
+            total4x1000.sumar(ultimoResultado.getImpuesto4x1000());
+            totalAportesSeguridad.sumar(ultimoResultado.getAporteSeguridadSocial());
+            historial.add(ultimoResultado);
+            inversionActual = variacion.aplicarVariacion(inversionActual, ultimoResultado.getGananciaReal());
         }
-        return new ResultadoInversion(capitalFinal, totalGanancia, totalRetencion, total4x1000, totalAportesSeguridad);
+        Objects.requireNonNull(ultimoResultado);
+        double capitalFinalConGanancia = ultimoResultado.getCapitalInicial() + ultimoResultado.getGananciaReal();
+        ResultadoInversion resultado = new ResultadoInversion(capitalFinalConGanancia, totalGanancia, totalRetencion, total4x1000, totalAportesSeguridad);
+        if (aplica4x100Final) {
+            Impuesto4x1000 impuesto4x100Final = new Impuesto4x1000();
+            impuesto4x100Final.setImpuestoMovimientoSalida(Impuesto4x1000.calcular(capitalFinalConGanancia));
+            total4x1000.sumar(impuesto4x100Final);
+            return resultado.aplicar4x1000();
+        }
+        return resultado;
     }
 
     @Override

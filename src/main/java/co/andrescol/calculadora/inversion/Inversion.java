@@ -16,9 +16,8 @@ public abstract class Inversion {
 
     public abstract ResultadoInversion calcularGanancia();
 
-    public void calcularEImprimir(ResultadoInversion resultado) {
+    public void imprimir(ResultadoInversion resultado) {
         Logger log = LogManager.getLogger();
-        log.info("");
         log.info("""
                 ====================================== {} ===========================================
                 {}

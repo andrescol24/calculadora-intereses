@@ -23,7 +23,7 @@ public class Main {
         ResultadoInversion mejorResultado = null;
         for(Inversion inversion : inversiones) {
             ResultadoInversion resultado = inversion.calcularGanancia();
-            inversion.calcularEImprimir(resultado);
+            inversion.imprimir(resultado);
             if(mejorResultado == null || mejorResultado.getGananciaReal() < resultado.getGananciaReal()) {
                 mejorResultado = resultado;
                 mejorInversion = inversion;
@@ -33,6 +33,7 @@ public class Main {
         log.info("""
             =================== MEJOR INVERSION =====================
             {}
+            >>>> Generara >>>>
             {}
             """, mejorInversion, mejorResultado);
     }

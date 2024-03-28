@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class AporteSeguridadSocial {
     private static final double SALARIO_MINIMO = 1_300_000;
-    private static final double IBC = 0.4;
+    private static final double IBC = 0.4; // Ingreso Base de cotizacion del 40%
     private static final double APORTE_SALUD = 0.125;
     private static final double APORTE_PENSION = 0.16;
     private double gananciaIbc;
@@ -29,7 +29,7 @@ public class AporteSeguridadSocial {
 
     @Override
     public String toString() {
-        return "IBC: %s, Salud: %s, Pension: %s, TOTAL: %s".formatted(
+        return "(IBC: %s, Salud: %s, Pension: %s, TOTAL: %s)".formatted(
                 Util.toDinero(gananciaIbc),
                 Util.toDinero(aporteSalud),
                 Util.toDinero(aportePension),

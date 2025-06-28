@@ -17,7 +17,8 @@ public class InversionVariable extends Inversion {
     private InversionEntrante inversion;
     private Variacion variacion;
     private List<ResultadoInversion> historial;
-    private boolean aplica4x100Final;
+    private boolean aplica4x1000Final;
+    private boolean aplica4x1000Inicial;
 
     @Override
     public ResultadoInversion calcularInversion() {
@@ -29,7 +30,7 @@ public class InversionVariable extends Inversion {
             inversionActual = iterarCiclo(i, inversionActual, resultadoFinal);
         }
 
-        if (aplica4x100Final) {
+        if (aplica4x1000Final) {
             double retiro = resultadoFinal.getGananciaAntesImpuestos() - resultadoFinal.getRetencion();
             double impuesto = Impuesto4x1000Calculador.calcular(resultadoFinal.getCapitalInicial() + retiro);
             resultadoFinal.getImpuesto4x1000().sumar(new Impuesto4x1000(0, impuesto));
@@ -48,9 +49,11 @@ public class InversionVariable extends Inversion {
     }
 
     private void actualizar4x1000(int ciclo, ResultadoInversion actual) {
-        if(inversion.aplica4x1000Inicial) {
-            double capital = ciclo == 0 ? inversion.capital : variacion.variacionInversion();
-            Impuesto4x1000 impuesto = new Impuesto4x1000(Impuesto4x1000Calculador.calcular(capital), 0);
+        if(ciclo == 0 && aplica4x1000Inicial) {
+            Impuesto4x1000 impuesto = new Impuesto4x1000(Impuesto4x1000Calculador.calcular(inversion.capital), 0);
+            actual.setImpuesto4x1000(impuesto);
+        } else if(inversion.aplica4x1000Inicial){
+            Impuesto4x1000 impuesto = new Impuesto4x1000(Impuesto4x1000Calculador.calcular(variacion.variacionInversion()), 0);
             actual.setImpuesto4x1000(impuesto);
         }
     }

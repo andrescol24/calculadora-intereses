@@ -1,6 +1,9 @@
+package co.andrescol.calculadora;
+
 import co.andrescol.calculadora.inversion.Inversion;
 import co.andrescol.calculadora.objetos.InversionDeserializer;
 import co.andrescol.calculadora.resultadoinversion.ResultadoInversion;
+import co.andrescol.calculadora.util.Util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
@@ -9,6 +12,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) throws FileNotFoundException {
@@ -19,22 +25,14 @@ public class Main {
 
         JsonReader jsonReader = new JsonReader(new FileReader(path));
         Inversion[] inversiones = gson.fromJson(jsonReader, Inversion[].class);
-        Inversion mejorInversion = null;
-        ResultadoInversion mejorResultado = null;
+        List<Map.Entry<Inversion, ResultadoInversion>> resultados = new LinkedList<>();
         for(Inversion inversion : inversiones) {
-            ResultadoInversion resultado = inversion.calcularGanancia();
+            ResultadoInversion resultado = inversion.calcularInversion();
             inversion.imprimir(resultado);
-            if(mejorResultado == null || mejorResultado.getGananciaReal() < resultado.getGananciaReal()) {
-                mejorResultado = resultado;
-                mejorInversion = inversion;
-            }
+            resultados.add(Map.entry(inversion, resultado));
         }
         Logger log = LogManager.getLogger();
-        log.info("""
-            =================== MEJOR INVERSION =====================
-            {}
-            >>>> Generara >>>>
-            {}
-            """, mejorInversion, mejorResultado);
+        log.info("======================== RESUMEN ==================================");
+        resultados.forEach(x -> log.info("{} ===> {}", x.getKey().getNombre(), Util.toDinero(x.getValue().calcularGananciaReal())));
     }
 }

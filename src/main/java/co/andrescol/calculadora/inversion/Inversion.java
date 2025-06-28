@@ -14,7 +14,7 @@ public abstract class Inversion {
     private String nombre;
     private String tipo;
 
-    public abstract ResultadoInversion calcularGanancia();
+    public abstract ResultadoInversion calcularInversion();
 
     public void imprimir(ResultadoInversion resultado) {
         Logger log = LogManager.getLogger();

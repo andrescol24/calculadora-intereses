@@ -2,7 +2,6 @@ package co.andrescol.calculadora.objetos;
 
 import co.andrescol.calculadora.inversion.Inversion;
 import co.andrescol.calculadora.inversion.InversionCDT;
-import co.andrescol.calculadora.inversion.InversionCombinada;
 import co.andrescol.calculadora.inversion.InversionVariable;
 import co.andrescol.calculadora.inversion.TipoInversion;
 import com.google.gson.JsonDeserializationContext;
@@ -19,9 +18,7 @@ public class InversionDeserializer implements JsonDeserializer<Inversion> {
 
         return switch (tipo) {
             case NORMAL -> context.deserialize(json, InversionCDT.class);
-            case COMBINADA -> context.deserialize(json, InversionCombinada.class);
             case VARIABLE -> context.deserialize(json, InversionVariable.class);
-            default -> throw new IllegalArgumentException("Unknown type: " + type);
         };
     }
 }

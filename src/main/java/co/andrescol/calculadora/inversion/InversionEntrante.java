@@ -1,18 +1,26 @@
 package co.andrescol.calculadora.inversion;
 
 import co.andrescol.calculadora.impuesto.AporteSeguridadSocial;
-import co.andrescol.calculadora.impuesto.Impuesto4x1000;
+import co.andrescol.calculadora.objetos.PeriodicidadPago;
 import co.andrescol.calculadora.resultadoinversion.ResultadoInversion;
-import co.andrescol.calculadora.util.Impuesto4x1000Calculador;
 import co.andrescol.calculadora.util.ImpuestoSeguridadSocialCalculador;
+import co.andrescol.calculadora.util.Util;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Representa una inversion que solo se consigna, mas no se saca de la cuenta destino
+ */
 @Getter
 @Setter
-public class InversionCDT extends InversionEntrante {
-    private boolean aplica4x1000Final;
-
+public class InversionEntrante extends Inversion implements Cloneable {
+    protected double capital;
+    protected double ear;
+    protected int duracionDias;
+    protected double retencion;
+    protected boolean aplica4x1000Inicial;
+    protected double comision;
+    protected PeriodicidadPago periodicidadPago;
     @Override
     public ResultadoInversion calcularInversion() {
         // Convertir el EAR a una tasa nominal compuesta más frecuentemente
@@ -22,27 +30,32 @@ public class InversionCDT extends InversionEntrante {
         double gananciaAntesImpuestos = capital * tasaNominal;
         double retencion = gananciaAntesImpuestos * this.retencion;
 
-        // 4x1000
-        Impuesto4x1000 impuesto4x1000 = new co.andrescol.calculadora.impuesto.Impuesto4x1000();
-        if(aplica4x1000Inicial) {
-            impuesto4x1000.setEntrada(Impuesto4x1000Calculador.calcular(capital));
-        }
-        if(aplica4x1000Final) {
-            impuesto4x1000.setSalida(Impuesto4x1000Calculador.calcular(capital + gananciaAntesImpuestos - retencion));
-        }
-
         // Seguridad social
-        double gananciaAporteSeguridad = gananciaAntesImpuestos - retencion - impuesto4x1000.getTotal();
+        double gananciaAporteSeguridad = gananciaAntesImpuestos - retencion;
         AporteSeguridadSocial aporte = ImpuestoSeguridadSocialCalculador.calcular(duracionDias, periodicidadPago, gananciaAporteSeguridad);
 
         ResultadoInversion resultado = new ResultadoInversion();
-        resultado.setCapitalInicial(capital);
+        resultado.setCapitalInversion(capital);
         resultado.setGananciaAntesImpuestos(gananciaAntesImpuestos);
         resultado.setRetencion(retencion);
         resultado.setComision(comision);
-        resultado.setImpuesto4x1000(impuesto4x1000);
         resultado.setAporteSeguridadSocial(aporte);
 
         return resultado;
+    }
+
+    @Override
+    public String toString() {
+        return "Inversion: %s, EA: %f%%, Inversion inicial: %s, Tiempo: %d dias, Retencion: %.2f%% "
+                .formatted(getNombre(), ear * 100, Util.toDinero(capital), duracionDias, retencion * 100);
+    }
+
+    @Override
+    public InversionEntrante clone() {
+        try {
+            return (InversionEntrante) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

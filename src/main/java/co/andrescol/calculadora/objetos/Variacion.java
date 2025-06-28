@@ -1,13 +1,16 @@
 package co.andrescol.calculadora.objetos;
 
-import co.andrescol.calculadora.inversion.InversionCDT;
+import co.andrescol.calculadora.inversion.InversionEntrante;
 import co.andrescol.calculadora.util.Util;
 
 public record Variacion(double variacionInversion, double variacionEA, double topeVariacion, int ciclos) {
-    public InversionCDT aplicarVariacion(InversionCDT inversion, double ganancia) {
-        double nuevaInversion = inversion.getInversionInicial() + ganancia + variacionInversion;
+    public InversionEntrante aplicarVariacion(InversionEntrante inversion, double ganancia) {
+        double nuevoCapital = inversion.getCapital() + ganancia + variacionInversion;
         double nuevoEA = aplicarVariacionEA(inversion.getEar());
-        return new InversionCDT(nuevaInversion, nuevoEA, inversion);
+        InversionEntrante nuevaInversion = inversion.clone();
+        nuevaInversion.setCapital(nuevoCapital);
+        nuevaInversion.setEar(nuevoEA);
+        return nuevaInversion;
     }
 
     private double aplicarVariacionEA(double ear) {

@@ -10,46 +10,33 @@ import lombok.Setter;
 @Setter
 public class ResultadoInversion {
 
-    private final double capitalInicial;
-    private final Impuesto4x1000 impuesto4x1000;
-    private final double retencion;
-    private final AporteSeguridadSocial aporteSeguridadSocial;
-    private final double gananciaAntesDeBeneficiosEImpuestos;
-    private double gananciaReal;
+    private double capitalInicial;
+    private double capitalInversion;
+    private Impuesto4x1000 impuesto4x1000;
+    private double retencion;
+    private double comision;
+    private AporteSeguridadSocial aporteSeguridadSocial;
+    private double gananciaAntesImpuestos;
 
-    public ResultadoInversion(double capitalInicial, double gananciaReal, double retencion, Impuesto4x1000 impuesto4x1000, AporteSeguridadSocial aportesSeguridadSocial) {
-        this.capitalInicial = capitalInicial;
-        this.gananciaReal = gananciaReal;
-        this.gananciaAntesDeBeneficiosEImpuestos = gananciaReal;
-        this.retencion = retencion;
-        this.impuesto4x1000 = impuesto4x1000;
-        this.aporteSeguridadSocial = aportesSeguridadSocial;
+    public ResultadoInversion() {
+        impuesto4x1000 = new Impuesto4x1000();
+        aporteSeguridadSocial = new AporteSeguridadSocial();
     }
 
-    public ResultadoInversion(double capitalInicial, double gananciaReal, double retencion, Impuesto4x1000 impuesto4x1000) {
-        this(capitalInicial, gananciaReal, retencion, impuesto4x1000, new AporteSeguridadSocial());
+    public double calcularGananciaReal() {
+        return gananciaAntesImpuestos - comision - retencion - impuesto4x1000.getTotal() - aporteSeguridadSocial.getTotal();
     }
-
-    public ResultadoInversion aplicar4x1000() {
-        this.gananciaReal = this.gananciaReal - this.impuesto4x1000.getTotal();
-        return this;
-    }
-
-    public ResultadoInversion aplicarSeguridadSocial() {
-        aporteSeguridadSocial.calcularAporte(gananciaReal);
-        this.gananciaReal = this.gananciaReal - aporteSeguridadSocial.getAporteSalud() - aporteSeguridadSocial.getAportePension();
-        return this;
-    }
-
-
     @Override
     public String toString() {
-        return "Capital: %s, Retencion: %s, 4x1000: %s, Seguridad social: %s, Ganancia inicial: %s, Ganancia final: %s".formatted(
+        return "Cap: %s, Comp: %s, Ant. de Imp.: %s, Ret: %s, 4x1000: %s, Comision: %s, Seg. S: %s, Ganancia: %s".formatted(
                 Util.toDinero(capitalInicial),
+                Util.toDinero(capitalInversion),
+                Util.toDinero(gananciaAntesImpuestos),
                 Util.toDinero(retencion),
                 impuesto4x1000,
+                Util.toDinero(comision),
                 aporteSeguridadSocial,
-                Util.toDinero(gananciaAntesDeBeneficiosEImpuestos),
-                Util.toDinero(gananciaReal));
+                Util.toDinero(calcularGananciaReal())
+        );
     }
 }

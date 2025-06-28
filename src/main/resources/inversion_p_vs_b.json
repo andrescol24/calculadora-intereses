@@ -2,6 +2,7 @@
   {
     "nombre": "Bancolombia",
     "tipo": "VARIABLE",
+    "inicioInmediato": true,
     "inversion": {
       "capital": 48398035,
       "ear": 0.0865,
@@ -9,14 +10,14 @@
       "duracionDias": 30,
       "periodicidadPago": "AL_FINAL",
       "aplica4x1000Inicial": false,
-      "aplica4x1000Final": true,
+      "aplica4x1000Final": false,
       "comision": 0.0
     },
     "variacion": {
       "variacionInversion": 1500000,
       "variacionEA": 0.0005,
       "topeVariacion": 0.082,
-      "ciclos": 12
+      "ciclos": 6
     }
   },
   {
@@ -24,6 +25,7 @@
     "tipo": "VARIABLE",
     "aplica4x1000Inicial": true,
     "aplica4x1000Final": true,
+    "inicioInmediato": true,
     "inversion": {
       "capital": 48398035,
       "ear": 0.12,
@@ -36,29 +38,8 @@
     "variacion": {
       "variacionInversion": 1500000,
       "variacionEA": 0.0005,
-      "topeVariacion": 0.10,
-      "ciclos": 12
-    }
-  },
-  {
-    "nombre": "Nubank",
-    "tipo": "VARIABLE",
-    "aplica4x1000Inicial": true,
-    "aplica4x1000Final": true,
-    "inversion": {
-      "capital": 48398035,
-      "ear": 0.0925,
-      "retencion": 0.07,
-      "duracionDias": 30,
-      "periodicidadPago": "AL_FINAL",
-      "aplica4x1000Inicial": false,
-      "comision": 0
-    },
-    "variacion": {
-      "variacionInversion": 1500000,
-      "variacionEA": 0.0005,
-      "topeVariacion": 0.10,
-      "ciclos": 12
+      "topeVariacion": 0.082,
+      "ciclos": 6
     }
   }
 ]

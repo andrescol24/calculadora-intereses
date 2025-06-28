@@ -33,6 +33,10 @@ public class Main {
         }
         Logger log = LogManager.getLogger();
         log.info("======================== RESUMEN ==================================");
-        resultados.forEach(x -> log.info("{} ===> {}", x.getKey().getNombre(), Util.toDinero(x.getValue().calcularGananciaReal())));
+        resultados.forEach(x -> log.info("{} ===> capital: {} , interes: {}, total: {}",
+                x.getKey().getNombre(),
+                Util.toDinero(x.getValue().getCapitalInicial()),
+                Util.toDinero(x.getValue().calcularGananciaReal()),
+                Util.toDinero(x.getValue().getCapitalInicial() + x.getValue().calcularGananciaReal())));
     }
 }

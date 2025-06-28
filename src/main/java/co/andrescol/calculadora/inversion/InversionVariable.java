@@ -19,33 +19,38 @@ public class InversionVariable extends Inversion {
     private List<ResultadoInversion> historial;
     private boolean aplica4x1000Final;
     private boolean aplica4x1000Inicial;
+    private boolean inicioInmediato;
 
     @Override
     public ResultadoInversion calcularInversion() {
         historial = new LinkedList<>();
         ResultadoInversion resultadoFinal = new ResultadoInversion();
-
-        InversionEntrante inversionActual = inversion;
-        for (int i = 0;  i < variacion.ciclos(); i++) {
-            inversionActual = iterarCiclo(i, inversionActual, resultadoFinal);
-        }
-
-        if (aplica4x1000Final) {
-            double retiro = resultadoFinal.getGananciaAntesImpuestos() - resultadoFinal.getRetencion();
-            double impuesto = Impuesto4x1000Calculador.calcular(resultadoFinal.getCapitalInicial() + retiro);
-            resultadoFinal.getImpuesto4x1000().sumar(new Impuesto4x1000(0, impuesto));
-        }
+        iterarCiclo(resultadoFinal);
+        aplicar4x1000Final(resultadoFinal);
         return resultadoFinal;
     }
 
-    private InversionEntrante iterarCiclo(int ciclo, InversionEntrante inversionActual, ResultadoInversion resultadoFinal) {
-        ResultadoInversion resultadoActual = inversionActual.calcularInversion();
-        resultadoActual.setCapitalInicial(inversion.getCapital() + variacion.variacionInversion() * ciclo);
-        actualizar4x1000(ciclo, resultadoActual);
+    private void iterarCiclo(ResultadoInversion resultadoFinal) {
+        InversionCompuesta inversionActual = obtenerInversionActual();
+        ResultadoInversion resultadoActual = new ResultadoInversion();
+        for (int i = 0;  i < variacion.ciclos(); i++) {
+            resultadoActual = inversionActual.calcularInversion();
+            actualizar4x1000(i, resultadoActual);
+            historial.add(resultadoActual);
+            actualizarResultadoFinal(resultadoFinal, resultadoActual);
+            inversionActual =  variacion.aplicarVariacion(inversionActual, resultadoActual.calcularGananciaReal());
+        }
+        resultadoFinal.setCapitalInversion(resultadoFinal.getCapitalInversion() + resultadoActual.getGananciaAntesImpuestos() - resultadoActual.getRetencion());
+    }
 
-        historial.add(resultadoActual);
-        actualizarResultadoFinal(resultadoFinal, resultadoActual);
-        return variacion.aplicarVariacion(inversionActual, resultadoActual.calcularGananciaReal());
+    private InversionCompuesta obtenerInversionActual() {
+        if(inicioInmediato) {
+            InversionEntrante entranteModificada = inversion.clone();
+            entranteModificada.setCapital(inversion.capital + variacion.variacionInversion());
+            return new InversionCompuesta(entranteModificada);
+        } else {
+            return new InversionCompuesta(inversion);
+        }
     }
 
     private void actualizar4x1000(int ciclo, ResultadoInversion actual) {
@@ -60,11 +65,20 @@ public class InversionVariable extends Inversion {
 
     private void actualizarResultadoFinal(ResultadoInversion resultadoFinal, ResultadoInversion actual) {
         resultadoFinal.setCapitalInicial(actual.getCapitalInicial());
+        resultadoFinal.setCapitalInversion(actual.getCapitalInversion());
         resultadoFinal.setComision(resultadoFinal.getComision() + actual.getComision());
         resultadoFinal.setRetencion(resultadoFinal.getRetencion() + actual.getRetencion());
         resultadoFinal.getImpuesto4x1000().sumar(actual.getImpuesto4x1000());
         resultadoFinal.getAporteSeguridadSocial().sumar(actual.getAporteSeguridadSocial());
         resultadoFinal.setGananciaAntesImpuestos(resultadoFinal.getGananciaAntesImpuestos() + actual.getGananciaAntesImpuestos());
+    }
+
+    private void aplicar4x1000Final(ResultadoInversion resultadoFinal) {
+        if (aplica4x1000Final) {
+            double retiro = resultadoFinal.getGananciaAntesImpuestos() - resultadoFinal.getRetencion();
+            double impuesto = Impuesto4x1000Calculador.calcular(resultadoFinal.getCapitalInicial() + retiro);
+            resultadoFinal.getImpuesto4x1000().sumar(new Impuesto4x1000(0, impuesto));
+        }
     }
 
     @Override

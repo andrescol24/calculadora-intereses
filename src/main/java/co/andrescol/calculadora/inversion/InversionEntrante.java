@@ -6,6 +6,7 @@ import co.andrescol.calculadora.resultadoinversion.ResultadoInversion;
 import co.andrescol.calculadora.util.ImpuestoSeguridadSocialCalculador;
 import co.andrescol.calculadora.util.Util;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -13,6 +14,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 public class InversionEntrante extends Inversion implements Cloneable {
     protected double capital;
     protected double ear;
@@ -21,6 +23,16 @@ public class InversionEntrante extends Inversion implements Cloneable {
     protected boolean aplica4x1000Inicial;
     protected double comision;
     protected PeriodicidadPago periodicidadPago;
+
+    protected InversionEntrante(InversionEntrante inversion) {
+        this.capital = inversion.capital;
+        this.ear = inversion.ear;
+        this.duracionDias = inversion.duracionDias;
+        this.retencion = inversion.retencion;
+        this.aplica4x1000Inicial = inversion.aplica4x1000Inicial;
+        this.comision = inversion.comision;
+        this.periodicidadPago = inversion.periodicidadPago;
+    }
     @Override
     public ResultadoInversion calcularInversion() {
         // Convertir el EAR a una tasa nominal compuesta más frecuentemente
@@ -36,6 +48,7 @@ public class InversionEntrante extends Inversion implements Cloneable {
 
         ResultadoInversion resultado = new ResultadoInversion();
         resultado.setCapitalInversion(capital);
+        resultado.setCapitalInicial(capital);
         resultado.setGananciaAntesImpuestos(gananciaAntesImpuestos);
         resultado.setRetencion(retencion);
         resultado.setComision(comision);
